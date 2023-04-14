@@ -8,6 +8,10 @@ const { asyncHandler } = require('../../auth/authUtils');
 const { authentication, authenticationV2 } = require('../../auth/authUtils');
 
 
+//admin route
+// router.post('/admin/signup', asyncHandler(accessController.signupAdmin));
+router.post('/admin/login', asyncHandler(accessController.login));
+
 //signup
 router.post('/shop/signup', asyncHandler(accessController.signup));
 router.post('/shop/login', asyncHandler(accessController.login));

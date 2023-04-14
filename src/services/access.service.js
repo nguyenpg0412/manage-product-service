@@ -101,6 +101,71 @@ class AccessService {
         }
     }
 
+    static signupAdmin = async ({ name, email, password }) => {
+        try {
+            //step1: check email is existing && role is admin
+
+            const admin = await shopModel.findOne({ email, roles: 'admin' }).lean();
+            if (admin) {
+                throw new BadRequestError('error: Shop already exists!');
+            }
+            const passwordHash = await bcrypt.hash(password, 10);
+
+            const newShopAdmin = await shopModel.create({
+                name,
+                email,
+                password: passwordHash,
+                roles: [RoleShop.ADMIN]
+            });
+
+            if (newShopAdmin) {
+                const privateKey = crypto.randomBytes(64).toString('hex');
+                const publicKey = crypto.randomBytes(64).toString('hex');
+
+                const keyStore = await KeyTokenService.createKeyToken({
+                    userId: newShopAdmin._id,
+                    publicKey,
+                    privateKey
+                }); // -> save publickey to db
+
+                if (!keyStore) {
+                    return {
+                        code: 'xxxx',
+                        message: 'Something went wrong',
+                        stautus: 'error'
+                    }
+                }
+
+                const tokens = await createPairToken({
+                    userId: newShopAdmin._id,
+                    email
+                }, publicKey, privateKey);
+
+                return {
+                    code: 201,
+                    metaData: {
+                        shop: getInforData({ fields: ['_id', 'name', 'email'], object: newShopAdmin }),
+                        tokens
+                    }
+                }
+
+            }
+
+            return {
+                code: 200,
+                metaData: null
+            }
+
+
+        } catch (error) {
+            return {
+                code: '401',
+                message: error.message,
+                stautus: 'error'
+            }
+        }
+    }
+
     /**
      * 
      * 1.check email in dbs
@@ -128,6 +193,11 @@ class AccessService {
             privateKey, publicKey,
             userId
         });
+        
+        if (foundShop.roles.includes('ADMIN')) return {
+            code: 200,
+            metaData: 'hi admin'
+        }
 
         return {
             shop: getInforData({ fields: ['_id', 'name', 'email'], object: foundShop }),
@@ -222,6 +292,13 @@ class AccessService {
             user,
             tokens
         }
+    }
+
+    static adminTest = async ({ adminName }) => {
+        const admin = await findByEmail({ email: adminName });
+        console.log(admin);
+        if (!admin) throw new AuthFailureError('you are not admin');
+        return admin;
     }
 
 }

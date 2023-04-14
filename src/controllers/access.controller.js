@@ -14,6 +14,17 @@ class AccessController {
         }).send(res);
     }
 
+    signupAdmin = async (req, res, next) => {
+        new CREATED({
+            message: 'register admin created',
+            metaData: await AccessService.signupAdmin(req.body),
+            options: {
+                limit: 10
+            }
+        }).send(res);
+    }
+
+
 
     login = async (req, res) => {
         new SuccessResponse({
