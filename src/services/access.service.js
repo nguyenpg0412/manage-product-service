@@ -214,7 +214,7 @@ class AccessService {
     /**
      * check this token used?
      */
-    static handlerRefreshToken = async (refreshToken) => {
+    static handlerRefreshToken = async (refreshToken) => {  
         //check xem token nay da duoc su dung chua?
         const foundToken = await KeyTokenService.findByRefreshToken(refreshToken);
         if (foundToken) {

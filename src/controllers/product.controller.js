@@ -6,15 +6,6 @@ const { SuccessResponse } = require('../core/success.response');
 
 class ProductController {
     createProduct = async (req, res, next) => {
-        // new SuccessResponse({
-        //     message: 'Product created successfully',
-        //     metaData: await ProductService.createProduct(req.body.product_type, {
-        //         ...req.body,
-        //         product_shop: req.user.userId
-        //     })
-
-        // }).send(res);
-
         new SuccessResponse({
             message: 'Product created successfully',
             metaData: await ProductServiceV2.createProduct(req.body.product_type, {
@@ -100,9 +91,9 @@ class ProductController {
     updateProduct = async (req, res, next) => {
         new SuccessResponse({
             message: 'update product successfully',
-            metaData: await ProductService.updateProduct({
+            metaData: await ProductServiceV2.updateProduct(req.body.product_type, req.params.productId, {
                 ...req.body,
-                product_shop
+                product_shop: req.user.userId
             })
         }).send(res);
     }
