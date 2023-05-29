@@ -4,7 +4,7 @@ const { product, clothing, electronic, furniture } = require('../models/product.
 const { BadRequestError } = require('../core/error.response');
 const { findAllDraftsForShop, publishProductByShop, findAllPublishForShop, unPublishProductByShop, searchProductByUser, findAllProducts, findProduct, updateProductById } = require('../models/repositories/product.repo');
 const { removeUndefinedObject, updateNestedObjectParser } = require('../utils');
-const { insertInventory } = require('../models/repositories/invetory.repo');
+const { insertInventory } = require('../models/repositories/inventory.repo');
 
 class ProductFactory {
 

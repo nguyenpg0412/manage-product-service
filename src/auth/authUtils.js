@@ -8,7 +8,7 @@ const { findByUserId } = require('../services/keyToken.service');
 const HEADERS = {
     AUTHORIZATION: 'authorization',
     CLIENT_ID: 'x-client-id',
-    REFRESHTOKEN: 'x-rtoken-id',
+    REFRESHTOKEN: "x-rtoken-id",
 };
 
 const createPairToken = async (payload, publicKey, privateKey) => {
@@ -92,6 +92,7 @@ const authenticationV2 = asyncHandler(async (req, res, next) => {
         try {
             const refreshToken = req.headers[HEADERS.REFRESHTOKEN];
             const decodeUser = JWT.verify(refreshToken, keyStore.privateKey);
+            // console.log('decode user', decodeUser);
             if (userId !== decodeUser.userId) throw new AuthFailureError('userId is not valid');
             req.keyStore = keyStore;
             req.user = decodeUser;

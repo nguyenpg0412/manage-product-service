@@ -294,13 +294,6 @@ class AccessService {
         }
     }
 
-    static adminTest = async ({ adminName }) => {
-        const admin = await findByEmail({ email: adminName });
-        console.log(admin);
-        if (!admin) throw new AuthFailureError('you are not admin');
-        return admin;
-    }
-
 }
 
 module.exports = AccessService;

@@ -7,7 +7,7 @@ const { Types } = require('mongoose');
 class KeyTokenService {
     static createKeyToken = async ({ userId, publicKey, privateKey, refreshToken }) => {
         try {
-            //level 0
+            // Version 1
             // const tokens = await keyTokenModel.create({
             //     user: userId,
             //     publicKey,
@@ -16,7 +16,7 @@ class KeyTokenService {
 
             // return tokens ? tokens.publicKey : null;
 
-            //level xxx
+            //Version 2
             const filter = { user: userId }, update = {
                 publicKey, privateKey, refreshTokensUsed: [], refreshToken
             }, options = { upsert: true, new: true };
